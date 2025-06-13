@@ -1,0 +1,27 @@
+.App {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+}
+input {
+  display: block;
+  width: 100%;
+  margin: 1rem 0;
+  padding: 0.5rem;
+}
+button {
+  padding: 0.7rem 1.2rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.result {
+  background: #f0f0f0;
+  padding: 1rem;
+  margin-top: 2rem;
+}
+pre {
+  white-space: pre-wrap;
+}
