@@ -1,7 +1,10 @@
-const express = require('express');
+import express from 'express';
+import axios from 'axios';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const router = express.Router();
-const axios = require('axios');
-require('dotenv').config();
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
@@ -43,7 +46,7 @@ Respond ONLY in raw JSON format with NO extra text or explanation. Format strict
 
     const aiText = response.data.choices[0].message.content.trim();
 
-    // 🛡 Extract only JSON block using regex
+    // 🛡 Extract JSON block using regex
     const jsonMatch = aiText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
       console.error('❌ No JSON object found in AI response:\n', aiText);
@@ -66,4 +69,4 @@ Respond ONLY in raw JSON format with NO extra text or explanation. Format strict
   }
 });
 
-module.exports = router;
+export default router;

@@ -20,12 +20,14 @@ function ColdEmailPage() {
     setSkills([]);
 
     try {
-      const response = await axios.post('http://localhost:5000/generate', { jobUrl });
+      const response = await axios.post('https://cold-email-2-ncte.onrender.com/api/generate', {
+        jobUrl,
+      });
 
-      setEmail(response.data.generatedEmail || '');
+      setEmail(response.data.generatedEmail || response.data.email || '');
       setSkills(response.data.skills || []);
     } catch (err) {
-      console.error(err);
+      console.error('❌ Axios Error:', err.response?.data || err.message);
       setError('Failed to generate email. Please try again.');
     } finally {
       setLoading(false);
@@ -98,7 +100,7 @@ const styles = {
     width: '100%',
     padding: '12px',
     backgroundColor: '#2563eb',
-    color: 'blue',
+    color: 'white',
     fontSize: '16px',
     border: 'none',
     borderRadius: '6px',
@@ -117,7 +119,7 @@ const styles = {
   },
   text: {
     whiteSpace: 'pre-wrap',
-    color:"blue",
+    color: 'blue',
     fontSize: '15px',
   },
 };

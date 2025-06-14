@@ -1,37 +1,33 @@
-// ✅ server.js
+// server.js
 
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import generateRoute from './routes/generate.js'; // ✅ ES module import
 
+// Load environment variables
+dotenv.config();
+
+// Initialize Express app
 const app = express();
 
-// ✅ Middlewares
-app.use(cors());
+// Middleware to parse JSON
 app.use(express.json());
 
-// ✅ Root Route
-app.get("/", (req, res) => {
-  res.send("✅ Cold Email Backend is Running!");
-});
+// Enable CORS for frontend
+app.use(
+  cors({
+    origin: 'https://cold-emailn.netlify.app', // ✅ Your deployed frontend URL
+    methods: ['GET', 'POST'],
+    credentials: true,
+  })
+);
 
-// ✅ Your API Route (example)
-app.post("/generate", (req, res) => {
-  const { jobUrl } = req.body;
+// Route for email generation
+app.use('/api/generate', generateRoute); // ✅ Now maps to /api/generate
 
-  if (!jobUrl) {
-    return res.status(400).json({ error: "jobUrl is required" });
-  }
-
-  // Example dummy response (you can connect with OpenAI or other logic)
-  res.json({
-    success: true,
-    email: `Generated cold email for job at ${jobUrl}`,
-  });
-});
-
-// ✅ PORT Binding (for Render & Local)
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
