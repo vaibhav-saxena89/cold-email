@@ -1,22 +1,25 @@
-// utils/generateEmail.js
 export const generateEmail = async ({ name, position, skills }) => {
   try {
-    const response = await fetch('http://localhost:3000/api/generate', {
+    // Use backend URL from environment or fallback
+    const backendURL = import.meta.env.VITE_BACKEND_URL || 'https://cold-email-x55y.onrender.com';
+
+    const response = await fetch(`${backendURL}/api/generate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include', // important for CORS with credentials
       body: JSON.stringify({
         name: name.trim(),
         position: position.trim(),
-        skills: skills.map(skill => skill.trim()), // ensure skills is an array of strings
+        skills: skills.map(skill => skill.trim()),
       }),
     });
 
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("❌ Frontend JSON Error:", error);
-    return { success: false, message: "Invalid JSON sent to server." };
+    console.error("❌ generateEmail() Error:", error);
+    return { success: false, message: "Server error. Please try again later." };
   }
 };
