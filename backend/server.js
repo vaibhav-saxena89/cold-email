@@ -1,5 +1,3 @@
-// server.js
-
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -17,7 +15,7 @@ app.use(express.json());
 // Enable CORS for frontend
 app.use(
   cors({
-    origin: 'https://cold-emailn.netlify.app', // ✅ Your deployed frontend URL
+    origin: 'https://coldemailnet.netlify.app', // ✅ Corrected frontend URL without dash
     methods: ['GET', 'POST'],
     credentials: true,
   })
