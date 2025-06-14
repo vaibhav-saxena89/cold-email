@@ -21,7 +21,7 @@ function App() {
     setSkills([]);
 
     try {
-      const response = await fetch("https://cold-email-2-ncte.onrender.com/api/generate", {
+      const response = await fetch("https://cold-email-x55y.onrender.com/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ jobUrl }),
@@ -36,6 +36,7 @@ function App() {
         setError(data.error || "Failed to generate email. Please try again.");
       }
     } catch (err) {
+      console.error("❌ Server error:", err);
       setError("Server error. Please try again.");
     } finally {
       setLoading(false);
