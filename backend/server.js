@@ -1,3 +1,5 @@
+// server.js
+
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -15,21 +17,21 @@ app.use(express.json());
 // Enable CORS for frontend
 app.use(
   cors({
-    origin: 'https://coldemailnet.netlify.app', // ✅ Corrected frontend URL without dash
+    origin: 'https://coldemailnet.netlify.app', // ✅ Final deployed frontend
     methods: ['GET', 'POST'],
     credentials: true,
   })
 );
 
-// ✅ Root route to handle "/"
+// ✅ Root route to test backend
 app.get('/', (req, res) => {
   res.send('🚀 Cold Email Backend is Running');
 });
 
-// Route for email generation
-app.use('/api/generate', generateRoute); // ✅ Now maps to /api/generate
+// ✅ Route for email generation
+app.use('/api/generate', generateRoute);
 
-// Start server
+// ✅ Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);

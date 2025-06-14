@@ -1,4 +1,3 @@
-
 import express from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
@@ -49,10 +48,16 @@ Respond ONLY in raw JSON format with NO extra text or explanation. Format strict
       }
     );
 
-    const aiText = response.data.choices[0].message.content.trim();
+    const aiText = response.data.choices?.[0]?.message?.content?.trim();
 
-    // Extract JSON block using regex
+    console.log("🧠 AI Response:", aiText); // 🔍 Debug log added
+
+    if (!aiText) {
+      return res.status(500).json({ error: 'Empty response from AI model.' });
+    }
+
     const jsonMatch = aiText.match(/\{[\s\S]*\}/);
+
     if (!jsonMatch) {
       console.error('❌ No JSON object found in AI response:\n', aiText);
       return res.status(500).json({ error: 'No valid JSON found in AI response.' });
