@@ -1,3 +1,4 @@
+
 import express from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
@@ -9,6 +10,10 @@ const router = express.Router();
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 router.post('/', async (req, res) => {
+  if (!GROQ_API_KEY) {
+    return res.status(500).json({ error: 'GROQ API key not configured in server.' });
+  }
+
   const { jobUrl } = req.body;
 
   if (!jobUrl) {
@@ -46,7 +51,7 @@ Respond ONLY in raw JSON format with NO extra text or explanation. Format strict
 
     const aiText = response.data.choices[0].message.content.trim();
 
-    // 🛡 Extract JSON block using regex
+    // Extract JSON block using regex
     const jsonMatch = aiText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
       console.error('❌ No JSON object found in AI response:\n', aiText);
