@@ -3,22 +3,21 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
 const router = express.Router();
+
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 router.post('/', async (req, res) => {
-  console.log('✅ POST /api/generate called');
+  const { jobUrl } = req.body;
+
+  console.log("🟡 jobUrl received:", jobUrl);
+  console.log("🟡 GROQ_API_KEY present:", !!GROQ_API_KEY);
 
   if (!GROQ_API_KEY) {
-    console.error('❌ GROQ_API_KEY not found in environment');
     return res.status(500).json({ error: 'GROQ API key not configured in server.' });
   }
 
-  const { jobUrl } = req.body;
-
   if (!jobUrl) {
-    console.error('❌ No jobUrl provided');
     return res.status(400).json({ error: 'jobUrl is required' });
   }
 
@@ -51,22 +50,27 @@ Respond ONLY in raw JSON format with NO extra text or explanation. Format strict
       }
     );
 
-    console.log('✅ Response from Groq:', response.data);
-
     const aiText = response.data.choices[0].message.content.trim();
-    const jsonMatch = aiText.match(/\{[\s\S]*\}/);
+    console.log("🟢 AI Response:", aiText);
 
+    const jsonMatch = aiText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
       console.error('❌ No JSON object found in AI response:\n', aiText);
       return res.status(500).json({ error: 'No valid JSON found in AI response.' });
     }
 
-    const parsed = JSON.parse(jsonMatch[0]);
-    console.log('✅ Parsed JSON:', parsed);
+    let parsed;
+    try {
+      parsed = JSON.parse(jsonMatch[0]);
+    } catch (parseError) {
+      console.error('❌ JSON Parse Error:', parseError.message);
+      console.error('AI Response:', aiText);
+      return res.status(500).json({ error: 'Invalid JSON format in AI response.' });
+    }
 
     res.json(parsed);
   } catch (error) {
-    console.error('❌ Groq API Error:', error.response?.data || error.message);
+    console.error('❌ Groq API Error:', error?.response?.data || error.message);
     res.status(500).json({ error: 'Failed to generate email using Groq.' });
   }
 });
