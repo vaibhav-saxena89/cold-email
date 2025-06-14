@@ -20,14 +20,14 @@ function App() {
     setEmail("");
     setSkills([]);
 
-    const response = await fetch("https://cold-email-x55y.onrender.com/api/generate", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({ jobUrl }),
-});
-
+    try {
+      const response = await fetch("https://cold-email-x55y.onrender.com/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ jobUrl }),
+      });
 
       const data = await response.json();
 
