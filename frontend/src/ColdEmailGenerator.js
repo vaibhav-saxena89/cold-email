@@ -19,10 +19,10 @@ function ColdEmailPage() {
     setEmail('');
     setSkills([]);
 
-    const response = await axios.post('https://cold-email-x55y.onrender.com/api/generate', {
-  jobUrl,
-});
-
+    try {
+      const response = await axios.post('https://cold-email-x55y.onrender.com/api/generate', {
+        jobUrl,
+      });
 
       setEmail(response.data.generatedEmail || response.data.email || '');
       setSkills(response.data.skills || []);

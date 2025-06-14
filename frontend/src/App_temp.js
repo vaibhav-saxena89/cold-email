@@ -11,7 +11,7 @@ function App() {
 
   const handleGenerate = async () => {
     if (!jobUrl.trim()) {
-      setError("Please enter a job URL.");
+      setError("❗ Please enter a job URL.");
       return;
     }
 
@@ -23,28 +23,31 @@ function App() {
     try {
       const response = await fetch("https://cold-email-x55y.onrender.com/api/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ jobUrl }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setEmail(data.generatedEmail);
-        setSkills(data.skills);
+        setEmail(data.generatedEmail || data.email || "No email generated.");
+        setSkills(data.skills || []);
       } else {
-        setError(data.error || "Failed to generate email. Please try again.");
+        setError(data.error || "❌ Failed to generate email. Please try again.");
+        console.error("❌ Backend error:", data.error);
       }
     } catch (err) {
       console.error("❌ Server error:", err);
-      setError("Server error. Please try again.");
+      setError("❌ Server error. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="App" style={{ padding: "2rem", fontFamily: "Arial" }}>
+    <div className="App" style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
       <h1>📩 Cold Email Generator</h1>
 
       <input
@@ -52,18 +55,44 @@ function App() {
         value={jobUrl}
         onChange={(e) => setJobUrl(e.target.value)}
         placeholder="Enter Job URL"
-        style={{ padding: "8px", width: "300px", marginRight: "10px" }}
+        style={{
+          padding: "10px",
+          width: "350px",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+          marginRight: "10px",
+        }}
       />
-      <button onClick={handleGenerate} disabled={loading}>
+      <button
+        onClick={handleGenerate}
+        disabled={loading}
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#2563eb",
+          color: "#fff",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer",
+        }}
+      >
         {loading ? "Generating..." : "Generate Email"}
       </button>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
 
       {email && (
         <div style={{ marginTop: "2rem" }}>
           <h3>📧 Generated Email</h3>
-          <pre style={{ background: "#f4f4f4", padding: "1rem" }}>{email}</pre>
+          <pre
+            style={{
+              background: "#f4f4f4",
+              padding: "1rem",
+              borderRadius: "6px",
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            {email}
+          </pre>
         </div>
       )}
 
@@ -72,7 +101,7 @@ function App() {
           <h3>🛠️ Required Skills</h3>
           <ul>
             {skills.map((skill, index) => (
-              <li key={index}>{skill}</li>
+              <li key={index}>• {skill}</li>
             ))}
           </ul>
         </div>
