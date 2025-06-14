@@ -23,6 +23,11 @@ app.use(
   })
 );
 
+// ✅ Root route to handle "/"
+app.get('/', (req, res) => {
+  res.send('🚀 Cold Email Backend is Running');
+});
+
 // Route for email generation
 app.use('/api/generate', generateRoute); // ✅ Now maps to /api/generate
 
