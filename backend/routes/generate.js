@@ -53,6 +53,7 @@ Respond ONLY in raw JSON format with NO extra text or explanation. Format strict
     const aiText = response.data.choices[0].message.content.trim();
     console.log("🟢 AI Response:", aiText);
 
+    // Extract JSON from AI response string
     const jsonMatch = aiText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
       console.error('❌ No JSON object found in AI response:\n', aiText);
@@ -68,6 +69,7 @@ Respond ONLY in raw JSON format with NO extra text or explanation. Format strict
       return res.status(500).json({ error: 'Invalid JSON format in AI response.' });
     }
 
+    // Respond with parsed JSON
     res.json(parsed);
   } catch (error) {
     console.error('❌ Groq API Error:', error?.response?.data || error.message);

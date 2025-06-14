@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState } from "react";
 import "./App_temp.css";
 
@@ -21,13 +20,17 @@ function App() {
     setSkills([]);
 
     try {
-      const response = await fetch("https://cold-email-x55y.onrender.com/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ jobUrl }),
-      });
+      const response = await fetch(
+        "https://cold-email-x55y.onrender.com/api/generate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ jobUrl }),
+          credentials: "include", // <== important to match backend CORS config
+        }
+      );
 
       const data = await response.json();
 
@@ -47,7 +50,10 @@ function App() {
   };
 
   return (
-    <div className="App" style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
+    <div
+      className="App"
+      style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}
+    >
       <h1>📩 Cold Email Generator</h1>
 
       <input
