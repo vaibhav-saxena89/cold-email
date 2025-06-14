@@ -33,7 +33,7 @@ function App() {
 
       if (response.ok) {
         setEmail(data.generatedEmail || data.email || "No email generated.");
-        setSkills(data.skills || []);
+        setSkills(Array.isArray(data.skills) ? data.skills : []);
       } else {
         setError(data.error || "❌ Failed to generate email. Please try again.");
         console.error("❌ Backend error:", data.error);
@@ -62,17 +62,24 @@ function App() {
           borderRadius: "4px",
           marginRight: "10px",
         }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleGenerate();
+          }
+        }}
+        disabled={loading}
       />
       <button
         onClick={handleGenerate}
         disabled={loading}
         style={{
           padding: "10px 20px",
-          backgroundColor: "#2563eb",
+          backgroundColor: loading ? "#94a3b8" : "#2563eb",
           color: "#fff",
           border: "none",
           borderRadius: "4px",
-          cursor: "pointer",
+          cursor: loading ? "not-allowed" : "pointer",
+          transition: "background-color 0.3s ease",
         }}
       >
         {loading ? "Generating..." : "Generate Email"}
